@@ -1,0 +1,112 @@
+﻿@model List<DiaryEntry>
+
+<div class="py-vh-5 w-100 overflow-hidden" id="services">
+	<div class="container">
+		<div class="row py-5">
+			<div class="col-12 d-flex align-items-center" data-aos="fade-down">
+				<h2 class="display-7 mb-0">Your Diary</h2>
+
+				<!-- Add-entry button (flush right) -->
+				<a class="btn btn-dark btn-sm rounded-2 d-inline-flex align-items-center ms-auto"
+				   aria-label="Add new diary entry" asp-controller="DiaryEntries" asp-action="Create">
+					<i class="bi bi-plus-lg"></i>
+				</a>
+			</div>
+		</div>
+
+		<div class="row d-flex ">
+
+			@foreach (var entry in Model)
+			{
+				<div class="col-md-6 col-lg-4 mb-5 " data-aos="fade-up" data-aos-delay="200">
+					<span class=" fw-lighter ">@entry.Created</span>
+					<h4 class="py-2 mt-2 border-top border-dark">@entry.Title</h4>
+					<p>
+						@(
+							!string.IsNullOrEmpty(entry.Content) && entry.Content.Length > 140
+							? entry.Content.Substring(0, 150) + "..."
+							: entry.Content
+							)
+					</p>
+					<!-- compact, fully-rounded Edit / Delete buttons -->
+					<div class="d-flex gap-2">
+						<!-- gap-2 = 0.5 rem between buttons -->
+						<a asp-controller="DiaryEntries" asp-action="Edit" asp-route-id="@entry.Id"
+						   class="btn btn-outline-secondary btn-sm rounded-2">
+							<i class="bi bi-pencil me-1"></i>Edit
+						</a>
+
+						<button type="button"
+								class="btn btn-dark btn-sm rounded-2"
+								data-bs-toggle="modal"
+								data-bs-target="#confirmDeleteModal"
+								data-entry-id="@entry.Id"
+								data-entry-title="@entry.Title">
+							<i class="bi bi-trash me-1"></i>Delete
+						</button>
+					</div>
+				</div>
+			}
+		</div>
+
+		<div class="modal fade"
+			 id="confirmDeleteModal"
+			 tabindex="-1"
+			 aria-labelledby="confirmDeleteModalLabel"
+			 aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="confirmDeleteModalLabel">
+							Confirm Deletion
+						</h5>
+						<button type="button"
+								class="btn-close"
+								data-bs-dismiss="modal"
+								aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						Are you sure you want to delete
+						“<strong><span id="deleteEntryTitle"></span></strong>”?
+					</div>
+					<div class="modal-footer">
+						<button type="button"
+								class="btn btn-secondary"
+								data-bs-dismiss="modal">
+							Cancel
+						</button>
+						<form id="deleteForm"
+							  asp-controller="DiaryEntries"
+							  asp-action="Delete"
+							  method="post"
+							  class="d-inline">
+							<input type="hidden"
+								   name="id"
+								   id="deleteEntryId"
+								   value="" />
+							<button type="submit" class="btn btn-danger">
+								Delete
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			var confirmDeleteModal = document.getElementById('confirmDeleteModal');
+			confirmDeleteModal.addEventListener('show.bs.modal', function (event) {
+			  // Button that triggered the modal
+			  var button = event.relatedTarget;
+			  // Extract info from data-* attributes
+			  var entryId = button.getAttribute('data-entry-id');
+			  var entryTitle = button.getAttribute('data-entry-title');
+
+			  // Update the modal’s content
+			  document.getElementById('deleteEntryTitle').textContent = entryTitle;
+			  document.getElementById('deleteEntryId').value = entryId;
+			});
+		</script>
+
+
+	</div>
+</div>

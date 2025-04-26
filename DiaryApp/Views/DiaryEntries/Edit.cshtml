@@ -1,0 +1,46 @@
+﻿@model DiaryEntry
+<div class="w-100 overflow-hidden bg-gray-100" id="top">
+    <div class="container position-relative">
+
+        <div class="row">
+            <!-- form column -->
+            <div class=" py-vh-6 position-relative" data-aos="fade-right">
+                <h4 class="display-5 fw-bold mt-5">Edit Diary</h4> 
+
+                <!-- diary entry form -->
+                <form method="post" asp-action="Edit" class="mt-4 w-75">
+
+                    <div class="mb-3">
+                        <label asp-for="Title" class="form-label">Title</label>
+                        <input asp-for="Title" type="text" class="form-control border-2" placeholder="Morning Jog by the River" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Content" class="form-label">Content</label>
+                        <textarea asp-for="Content" class="form-control border-2" id="Content" name="Content"
+                                  rows="6" placeholder="Write your entry here…" required></textarea>
+                        <span asp-validation-for="Content" class="text-danger"></span>
+                    </div>
+
+                    <!-- optional Created field; remove if you fill it server-side -->
+                    <div class="mb-4">
+                        <label asp-for="Created" class="form-label">Date &amp; time</label>
+                        <input asp-for="Created" type="date" class="form-control border-2" id="Created" name="Created">
+                        <span asp-validation-for="Created" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit"
+                            class="btn btn-dark btn-xl shadow rounded-2">
+                        <i class="bi bi-save me-1"></i>Save Diary
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
